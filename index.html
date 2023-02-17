@@ -57,6 +57,13 @@
             <div id="map" style="height: 70vh;"></div>
           </div>
         </div>
+        <div class="row">
+          <div class="col p-3">
+            <ul class="list-group" id="data-sources">
+
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -89,6 +96,7 @@
         {
             let brand=document.getElementById("brand-select").value
             markers.clearLayers();
+            document.getElementById("data-sources").innerHTML="";
             if(brand!="0")
             {
                 fetch(`${location.origin}/geojson/${brand}.geojson`)
@@ -99,6 +107,7 @@
                             let marker=L.marker([...data.features[ind].geometry.coordinates]);
                             markers.addLayer(marker);
                         }
+                        for(ind in data.info.data_sources)document.getElementById("data-sources").innerHTML+=`<li class="list-group-item">${data.info.data_sources[ind]}</li>`;
                     });
             }
         }
