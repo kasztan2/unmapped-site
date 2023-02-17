@@ -107,7 +107,7 @@
                             let marker=L.marker([...data.features[ind].geometry.coordinates]);
                             markers.addLayer(marker);
                         }
-                        for(ind in data.info.data_sources)
+                        for(ind in data.info.external_sources)
                         {
                           document.getElementById("data-sources").innerHTML+=`<li class="list-group-item">${data.info.external_sources[ind]}</li>`;
                         }
