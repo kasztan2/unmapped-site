@@ -107,7 +107,10 @@
                             let marker=L.marker([...data.features[ind].geometry.coordinates]);
                             markers.addLayer(marker);
                         }
-                        for(ind in data.info.data_sources)document.getElementById("data-sources").innerHTML+=`<li class="list-group-item">${data.info.data_sources[ind]}</li>`;
+                        for(ind in data.info.data_sources)
+                        {
+                          document.getElementById("data-sources").innerHTML+=`<li class="list-group-item">${data.info.external_sources[ind]}</li>`;
+                        }
                     });
             }
         }
