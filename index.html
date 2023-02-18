@@ -105,12 +105,9 @@
         markers.addTo(map);
 
 
-        function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 
-        async function brandChange()
+        function brandChange()
         {
             let brand=document.getElementById("brand-select").value
             markers.clearLayers();
@@ -129,7 +126,6 @@
                             markers.addLayer(marker);
                             markersArr.push(marker);
                             bounds.extend(marker.getLatLng());
-                            //marker.addTo(markersArr);
                         }
                         for(ind in data.info.external_sources)
                         {
