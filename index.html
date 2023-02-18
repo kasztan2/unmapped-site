@@ -53,6 +53,9 @@
                 <select onchange="brandChange()" class="form-select bg-dark text-white" id="brand-select">
                     <option value="0" selected>Choose brand</option>
                 </select>
+                <div class="spinner-border text-primary" role="status" style="visibility: hidden;" id="spinner">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -101,13 +104,22 @@
         let markers=L.layerGroup();
         markers.addTo(map);
 
-        function brandChange()
+
+        function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+        async function brandChange()
         {
             let brand=document.getElementById("brand-select").value
             markers.clearLayers();
             document.getElementById("data-sources").innerHTML="";
+            let markersArr=[];
+            let bounds=L.latLngBounds([]);
             if(brand!="0")
             {
+                document.getElementById("spinner").style.visibility="visible";
                 fetch(`${location.origin}/geojson/${brand}.geojson`)
                     .then(res=>res.json())
                     .then(data=>{
@@ -115,11 +127,16 @@
                         {
                             let marker=L.marker([...data.features[ind].geometry.coordinates]);
                             markers.addLayer(marker);
+                            markersArr.push(marker);
+                            bounds.extend(marker.getLatLng());
+                            //marker.addTo(markersArr);
                         }
                         for(ind in data.info.external_sources)
                         {
                           document.getElementById("data-sources").innerHTML+=`<li class="list-group-item">${data.info.external_sources[ind]}</li>`;
                         }
+                        if(data.features.length>0)map.flyToBounds(bounds);
+                        document.getElementById("spinner").style.visibility="hidden";
                     });
             }
         }
