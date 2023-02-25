@@ -53,7 +53,8 @@
                     <thead>
                         <tr>
                             <th scope="col">NSI id</th>
-                            <th scope="col">Link</th>
+                            <th scope="col">Geojson</th>
+                            <th scope="col">OSM XML</th>
                         </tr>
                     </thead>
                     <tbody id="brandList">
@@ -75,10 +76,11 @@
                 {
                     const el=document.createElement("tr");
                     el.appendChild(document.createElement("th"));
-                    for(let i=0;i<4;++i)el.appendChild(document.createElement("td"));
+                    for(let i=0;i<3;++i)el.appendChild(document.createElement("td"));
                     el.children[0].innerText=brand;
                     el.children[0].setAttribute("scope", "row");
                     el.children[1].innerHTML=`<a href="${location.origin}/geojson/${brand}.geojson">Link</a>`;
+                    el.children[1].innerHTML=`<a href="${location.origin}/osm/${brand}.osm">Link</a>`;
                     document.getElementById("brandList").appendChild(el);
                 }
             });
