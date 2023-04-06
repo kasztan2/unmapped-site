@@ -89,10 +89,6 @@
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
         }).addTo(map);
-        /*L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-          maxZoom: 20,
-          attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-        }).addTo(map);*/
 
         fetch(`${location.origin}/status.json`)
             .then((response) => response.json())
@@ -117,7 +113,6 @@
             let brand=document.getElementById("brand-select").value
             markers.clearLayers();
             document.getElementById("data-sources").innerHTML="";
-            let markersArr=[];
             let bounds=L.latLngBounds([]);
             if(brand!="0")
             {
@@ -125,19 +120,13 @@
                 fetch(`${location.origin}/geojson/${brand}.geojson`)
                     .then(res=>res.json())
                     .then(data=>{
-                        for(ind in data.features)
-                        {
-                            let marker=L.marker([...data.features[ind].geometry.coordinates].reverse());
-                            marker.bindPopup(`${marker.getLatLng()}`);
-                            markers.addLayer(marker);
-                            markersArr.push(marker);
-                            bounds.extend(marker.getLatLng());
-                        }
+                        let geojsonData=L.geoJson(data, {onEachFeature: (x, layer)=>{layer.bindPopup(x.geometry.coordinates.join(", "));}});
+                        geojsonData.addTo(map);
                         for(ind in data.info.external_sources)
                         {
                           document.getElementById("data-sources").innerHTML+=`<li class="list-group-item">${data.info.external_sources[ind]}</li>`;
                         }
-                        if(data.features.length>0)map.flyToBounds(bounds);
+                        if(data.features.length>0)map.flyToBounds(data.features.map(x=>x.geometry.coordinates));
                         document.getElementById("spinner").style.visibility="hidden";
                     });
             }
