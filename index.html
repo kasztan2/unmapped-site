@@ -128,6 +128,7 @@
                         for(ind in data.features)
                         {
                             let marker=L.marker([...data.features[ind].geometry.coordinates].reverse());
+                            marker.bindPopup(`${marker.getLatLng()}`);
                             markers.addLayer(marker);
                             markersArr.push(marker);
                             bounds.extend(marker.getLatLng());
