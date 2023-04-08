@@ -175,7 +175,7 @@
                 },
               });
               geojsonData.addTo(map);
-              for (ind in status[brand].external_sources) {
+              for (ind in status[brand]["external_sources"]) {
                 document.getElementById(
                   "data-sources"
                 ).innerHTML += `<li class="list-group-item">${data.info.external_sources[ind]}</li>`;
