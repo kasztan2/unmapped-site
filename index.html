@@ -143,6 +143,7 @@
         .then((response) => response.json())
         .then((data) => {
           for (brand of data) {
+            console.log(brand)
             const el = document.createElement("option");
             el.setAttribute("value", brand["nsi_id"]);
             el.innerText = brand;
