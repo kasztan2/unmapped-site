@@ -67,7 +67,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
     <script>
-        document.getElementById("info").innerHTML+=`${location.origin}/geojson/<code>nsi_id</code>.geojson`;
+        document.getElementById("info").innerHTML+=`${location.origin}/api/geojson?brand=<code>nsi_id or "all"</code>`;
 
         fetch(`${location.origin}/status.json`)
             .then((response) => response.json())
@@ -78,8 +78,7 @@
                     for(let i=0;i<2;++i)el.appendChild(document.createElement("td"));
                     el.children[0].innerText=brand;
                     el.children[0].setAttribute("scope", "row");
-                    el.children[1].innerHTML=`<a href="${location.origin}/geojson/${brand}.geojson">Link</a>`;
-                    //el.children[2].innerHTML=`<a href="${location.origin}/osm/${brand}.osm">Link</a>`;
+                    el.children[1].innerHTML=`<a href="${location.origin}/api/geojson?brand=${brand}">Link</a>`;
                     document.getElementById("brandList").appendChild(el);
                 }
             });

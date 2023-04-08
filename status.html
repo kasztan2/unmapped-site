@@ -68,13 +68,13 @@
                 {
                     const el=document.createElement("tr");
                     el.appendChild(document.createElement("th"));
-                    for(let i=0;i<4;++i)el.appendChild(document.createElement("td"));
+                    for(let i=0;i<2;++i)el.appendChild(document.createElement("td"));
                     el.children[0].innerText=brand;
                     el.children[0].setAttribute("scope", "row");
-                    el.children[1].innerText=moment.unix(data[brand].overpass_request_timestamp).fromNow();
-                    el.children[2].innerText=moment.unix(data[brand].external_request_timestamp).fromNow();
-                    el.children[3].innerText=moment.unix(data[brand].comparison_timestamp).fromNow();
-                    el.children[4].innerText=data[brand].threshold_in_meters;
+                    //el.children[1].innerText=moment.unix(data[brand].overpass_request_timestamp).fromNow();
+                    //el.children[2].innerText=moment.unix(data[brand].external_request_timestamp).fromNow();
+                    el.children[1].innerText=moment.unix(data[brand].comparison_timestamp).fromNow();
+                    el.children[2].innerText=data[brand].threshold_in_meters;
                     document.getElementById("brandList").appendChild(el);
                 }
             });
