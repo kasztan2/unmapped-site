@@ -67,7 +67,7 @@
                     const el=document.createElement("tr");
                     el.appendChild(document.createElement("th"));
                     for(let i=0;i<2;++i)el.appendChild(document.createElement("td"));
-                    el.children[0].innerText=brand;
+                    el.children[0].innerText=data[brand].nsi_id;
                     el.children[0].setAttribute("scope", "row");
                     //el.children[1].innerText=moment.unix(data[brand].overpass_request_timestamp).fromNow();
                     //el.children[2].innerText=moment.unix(data[brand].external_request_timestamp).fromNow();
