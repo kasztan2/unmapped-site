@@ -137,14 +137,17 @@
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
       }).addTo(map);
 
-      fetch(`${location.origin}/status.json`)
+      status={};
+
+      fetch(`${location.origin}/api/status`)
         .then((response) => response.json())
         .then((data) => {
-          for (brand in data) {
+          for (brand of data) {
             const el = document.createElement("option");
-            el.setAttribute("value", brand);
+            el.setAttribute("value", brand["nsi_id"]);
             el.innerText = brand;
             document.getElementById("brand-select").appendChild(el);
+            status[brand["nsi_id"]]=brand;
           }
         });
 
@@ -172,7 +175,7 @@
                 },
               });
               geojsonData.addTo(map);
-              for (ind in data.info.external_sources) {
+              for (ind in status[brand].external_sources) {
                 document.getElementById(
                   "data-sources"
                 ).innerHTML += `<li class="list-group-item">${data.info.external_sources[ind]}</li>`;
