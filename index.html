@@ -137,16 +137,15 @@
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
       }).addTo(map);
 
-      status={};
+      let status=[];
 
       fetch(`${location.origin}/api/status`)
         .then((response) => response.json())
         .then((data) => {
           for (brand of data) {
-            console.log(brand)
             const el = document.createElement("option");
             el.setAttribute("value", brand["nsi_id"]);
-            el.innerText = brand;
+            el.innerText = brand["nsi_id"];
             document.getElementById("brand-select").appendChild(el);
             status[brand["nsi_id"]]=brand;
           }
