@@ -178,7 +178,7 @@
               for (ind in status[brand]["external_sources"]) {
                 document.getElementById(
                   "data-sources"
-                ).innerHTML += `<li class="list-group-item">${data.info.external_sources[ind]}</li>`;
+                ).innerHTML += `<li class="list-group-item">${status[brand]["external_sources"][ind]}</li>`;
               }
               if (data.features.length > 0)
                 map.flyToBounds(
