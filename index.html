@@ -16,6 +16,7 @@
       integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
       crossorigin=""
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.css" integrity="sha512-vJfMKRRm4c4UupyPwGUZI8U651mSzbmmPgR3sdE3LcwBPsdGeARvUM5EcSTg34DK8YIRiIo+oJwNfZPMKEQyug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
   <body data-bs-theme="dark">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -120,6 +121,7 @@
       integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
       crossorigin=""
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js" integrity="sha512-ozq8xQKq6urvuU6jNgkfqAmT7jKN2XumbrX1JiB3TnF7tI48DPI4Gy1GXKD/V3EExgAs1V+pRO7vwtS1LHg0Gw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
@@ -139,7 +141,31 @@
       }).addTo(map);
 
       let status={};
+
+    let editableLayers = new L.FeatureGroup();
+    map.addLayer(editableLayers);
+    
+    let options = {
+        position: 'topright',
+        draw: {
+            polyline: false,
+            polygon: false,
+            circle: false,
+            rectangle: false,
+            marker: false,
+            circlemarker: false
+        },
+        edit: {
+            featureGroup: editableLayers,
+            remove: false
+        }
+    };
+    
+    var drawControl = new L.Control.Draw(options);
+    map.addControl(drawControl);
+
       let selectBbox=L.rectangle([[52.161718,20.846558],[52.288743,21.119843]], {color: "#ff7800", weight: 1}).addTo(map);
+      editableLayers.addLayer(selectBbox);
 
       fetch(`${location.origin}/api/status`)
         .then((response) => response.json())
@@ -168,7 +194,10 @@
         document.getElementById("download_link").setAttribute("href", url);
       }
 
-      selectBbox.on("mouseup", updateDownloadLink);
+      //selectBbox.on("mouseup", updateDownloadLink);
+      map.on('draw:edited', function (e) {
+         updateDownloadLink();
+     });
 
       function brandChange() {
         let brand = document.getElementById("brand-select").value;
