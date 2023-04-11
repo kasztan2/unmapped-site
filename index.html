@@ -75,6 +75,7 @@
       <div class="container text-center">
         <div class="row">
           <div class="col p-3" data-bs-theme="dark">
+            <a href="#" id="download_link" download><button type="button" class="btn btn-primary">Download data in bbox</button></a>
             <select
               onchange="brandChange()"
               class="form-select bg-dark text-white"
@@ -130,7 +131,7 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      var map = L.map("map").setView([52.23, 21.01111], 13);
+      var map = L.map("map").setView([52.23, 21.01111], 11);
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution:
@@ -138,6 +139,7 @@
       }).addTo(map);
 
       let status={};
+      let selectBbox=L.rectangle([[52.161718,20.846558],[52.288743,21.119843]], {color: "#ff7800", weight: 1}).addTo(map);
 
       fetch(`${location.origin}/api/status`)
         .then((response) => response.json())
@@ -154,10 +156,25 @@
       let markers = L.layerGroup();
       markers.addTo(map);
 
+      function updateDownloadLink()
+      {
+        let brand = document.getElementById("brand-select").value;
+        let nw=selectBbox.toGeoJSON().geometry.coordinates[0][0];
+        nw=nw.reverse();
+        let se=selectBbox.toGeoJSON().geometry.coordinates[0][2];
+        se=se.reverse();
+        let url=`/api/geojson?brand=${brand}&nw=${nw.join(",")}&se=${se.join(",")}`;
+        console.log(url);
+        document.getElementById("download_link").setAttribute("href", url);
+      }
+
+      selectBbox.on("mouseup", updateDownloadLink);
+
       function brandChange() {
         let brand = document.getElementById("brand-select").value;
         markers.clearLayers();
         document.getElementById("data-sources").innerHTML = "";
+        updateDownloadLink();
         let bounds = L.latLngBounds([]);
         if (brand != "0") {
           document.getElementById("spinner").style.visibility = "visible";
@@ -180,10 +197,6 @@
                   "data-sources"
                 ).innerHTML += `<li class="list-group-item">${status[brand]["external_sources"][ind]}</li>`;
               }
-              if (data.features.length > 0)
-                map.flyToBounds(
-                  data.features.map((x) => x.geometry.coordinates)
-                );
               document.getElementById("spinner").style.visibility = "hidden";
             });
         }
