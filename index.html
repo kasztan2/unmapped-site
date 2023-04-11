@@ -193,8 +193,7 @@
         console.log(url);
         document.getElementById("download_link").setAttribute("href", url);
       }
-
-      //selectBbox.on("mouseup", updateDownloadLink);
+      
       map.on('draw:edited', function (e) {
          updateDownloadLink();
      });
